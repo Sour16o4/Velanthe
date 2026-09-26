@@ -9,8 +9,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
-    "test": "vitest run"
+    "test": "node --import ./scripts/register-alias.mjs --test \"src/**/*.test.js\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -22,13 +21,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^15.5.26",
     "@tailwindcss/postcss": "^4",
-    "eslint": "^9",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "tailwindcss": "^4",
-    "vitest": "^5.0.2"
+    "tailwindcss": "^4"
   }
 }

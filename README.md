@@ -10,7 +10,7 @@ A portfolio e-commerce site for Velanthe, an invented luxury skincare brand. Bro
 - Tailwind CSS v4 (animations are plain CSS)
 - Zustand for the bag and wishlist, saved in the browser (localStorage)
 - Supabase for accounts and orders — optional; the store works without it
-- Vitest for unit tests
+- Node's built-in test runner for unit tests (no test framework to install)
 
 ## Requirements
 
@@ -48,8 +48,7 @@ The demo account is shared by everyone who uses it. To reset its password: Supab
 |---|---|
 | `npm run dev` | Dev server |
 | `npm run build` / `npm start` | Production build / serve it |
-| `npm run lint` | ESLint |
-| `npm test` | Unit tests |
+| `npm test` | Unit tests (`node --test`; `scripts/register-alias.mjs` lets it understand the `@/` import shortcut) |
 | `node scripts/make-placeholders.mjs` | Regenerate the placeholder images |
 
 ## Deploy to Vercel
