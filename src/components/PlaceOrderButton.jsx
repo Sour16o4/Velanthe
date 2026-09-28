@@ -7,12 +7,8 @@ import { useFormStatus } from 'react-dom';
 export function PlaceOrderButton({ total }) {
   const { pending } = useFormStatus();
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="label border border-ink bg-ink px-6 py-4 text-ivory hover:bg-gold hover:text-ink disabled:opacity-50"
-    >
-      {pending ? 'Placing order…' : `Place order · ${total}`}
+    <button type="submit" disabled={pending} className="btn p wide">
+      <span>{pending ? 'Placing order…' : `Place order · ${total}`}</span>
     </button>
   );
 }
