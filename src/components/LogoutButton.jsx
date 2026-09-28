@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { useShop } from '@/store/shop';
+import { useSession } from '@/store/session';
 import { useUI } from '@/store/ui';
 
 export function LogoutButton() {
@@ -16,6 +18,9 @@ export function LogoutButton() {
         useUI.getState().say('We could not log you out. Please try again.');
         return;
       }
+      // Reset the store directly rather than relying on the SIGNED_OUT event's timing.
+      useShop.getState().signOut();
+      useSession.getState().setUser(null);
       router.push('/');
       router.refresh();
     } finally {
@@ -24,8 +29,8 @@ export function LogoutButton() {
   }
 
   return (
-    <button disabled={busy} className="label border border-ink px-6 py-3 hover:bg-gold disabled:opacity-50" onClick={logout}>
-      Log out
+    <button disabled={busy} className="btn" onClick={logout}>
+      <span>Log out</span>
     </button>
   );
 }
