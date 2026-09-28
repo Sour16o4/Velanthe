@@ -21,6 +21,10 @@ export function buildOrder(lines, lookup) {
   return { items, total: items.reduce((s, i) => s + i.unitPrice * i.qty, 0) };
 }
 
+// An order starts 'placed' and can only move to 'cancelled' (there is no shipping/fulfillment
+// to track in this demo store). Only a 'placed' order can still be cancelled.
+export const canCancel = (status) => status === 'placed';
+
 export function parseAddress(fd) {
   const get = (k) => String(fd.get(k) ?? '').trim();
   const a = { name: get('name'), line1: get('line1'), city: get('city'), postcode: get('postcode'), phone: get('phone') };
