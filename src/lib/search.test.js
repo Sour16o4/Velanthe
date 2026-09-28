@@ -11,6 +11,14 @@ describe('searchProducts', () => {
     assert.ok(slugs('cleanser').length >= 2);
     assert.ok(slugs('ceramides').includes('barrier-repair-cream'));
   });
+  it('finds products by skin type, essential oil and brand promise', () => {
+    assert.ok(slugs('oily skin').includes('clarity-gel-cleanser'));
+    assert.ok(!slugs('oily skin').includes('barrier-repair-cream'));
+    assert.ok(slugs('dry skin').includes('barrier-repair-cream'));
+    assert.ok(slugs('lavender').includes('silk-body-lotion'));
+    assert.ok(slugs('tea tree').includes('clarity-gel-cleanser'));
+    assert.equal(slugs('vegan').length, products.length);
+  });
   it('returns nothing for blank or whitespace-only input', () => {
     assert.deepEqual(slugs(''), []);
     assert.deepEqual(slugs('   '), []);

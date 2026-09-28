@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { clampQty, sanitizeBag, sanitizeList, bagCount, resolveBag, MAX_QTY } from './bag';
+import { clampQty, sanitizeBag, sanitizeList, mergeBags, mergeLists, bagCount, resolveBag, MAX_QTY } from './bag';
 import { bySlug } from '@/data/products';
 
 const known = (s) => ['a', 'b', 'c'].includes(s);
@@ -30,6 +30,26 @@ describe('sanitizeList', () => {
   it('keeps unique known string slugs only', () => {
     assert.deepEqual(sanitizeList(['a', 'a', 'zzz', 5, null, 'b'], known), ['a', 'b']);
     assert.deepEqual(sanitizeList('nope', known), []);
+  });
+});
+
+describe('mergeBags', () => {
+  it('takes the greater qty per slug, capped, over the union of slugs', () => {
+    assert.deepEqual(mergeBags({ a: 2, b: 9 }, { a: 5, c: 1 }), { a: 5, b: 9, c: 1 });
+    assert.deepEqual(mergeBags({ a: 10 }, { a: 10 }), { a: 10 });
+  });
+  it('is idempotent: merging the result again changes nothing', () => {
+    const once = mergeBags({ a: 2, b: 3 }, { a: 4 });
+    assert.deepEqual(mergeBags(once, { a: 4 }), once);
+    assert.deepEqual(mergeBags(once, once), once);
+  });
+});
+
+describe('mergeLists', () => {
+  it('unions without duplicates and is idempotent', () => {
+    const once = mergeLists(['a', 'b'], ['b', 'c']);
+    assert.deepEqual(once, ['a', 'b', 'c']);
+    assert.deepEqual(mergeLists(once, ['c']), once);
   });
 });
 

@@ -18,6 +18,18 @@ export function sanitizeList(raw, isKnown) {
   return [...new Set(raw.filter((s) => typeof s === 'string' && isKnown(s)))];
 }
 
+// Combine a guest's bag with the account's saved bag: the larger quantity per product wins.
+// Running it again with the same inputs changes nothing, so a repeated login merge is harmless.
+export function mergeBags(a, b) {
+  const out = {};
+  for (const slug of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    out[slug] = clampQty(Math.max(a[slug] ?? 0, b[slug] ?? 0));
+  }
+  return out;
+}
+
+export const mergeLists = (a, b) => [...new Set([...a, ...b])];
+
 export const bagCount = (b) => Object.values(b).reduce((x, y) => x + y, 0);
 
 export function resolveBag(b, lookup) {
