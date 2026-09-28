@@ -15,6 +15,7 @@ create table public.orders (
   items jsonb not null,
   total int not null check (total > 0),
   address jsonb not null,
+  status text not null default 'placed' check (status in ('placed', 'cancelled')),
   created_at timestamptz not null default now()
 );
 

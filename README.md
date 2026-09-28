@@ -4,6 +4,19 @@ A portfolio e-commerce site for Velanthe, an invented luxury skincare brand. Bro
 
 **Live URL:** add here after deploying to Vercel.
 
+## Screenshots
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/home.jpg" width="100%" alt="Home page hero"><br><sub>Home</sub></td>
+<td width="50%"><img src="docs/screenshots/collection.jpg" width="100%" alt="Collection page with skin-type and price filters"><br><sub>Collection &amp; filters</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/product.jpg" width="100%" alt="Product page with size chooser"><br><sub>Product page</sub></td>
+<td width="50%"><img src="docs/screenshots/bag.jpg" width="100%" alt="Bag drawer with two items"><br><sub>Bag drawer</sub></td>
+</tr>
+</table>
+
 ## Stack
 
 - Next.js 15 (App Router), React 19, plain JavaScript
@@ -43,6 +56,12 @@ Open http://localhost:3000.
 
 The demo account is shared by everyone who uses it. To reset its password: Supabase → Authentication → Users.
 
+**Already ran `schema.sql` before the "cancel order" feature was added?** It added a `status` column to `orders`. Run this once in the SQL editor to catch up (safe to run on an existing table; it does nothing if the column is already there):
+
+```sql
+alter table public.orders add column if not exists status text not null default 'placed' check (status in ('placed', 'cancelled'));
+```
+
 ## Scripts
 
 | Command | Does |
@@ -65,6 +84,7 @@ Supabase free projects pause after about a week without use. `.github/workflows/
 ## Notes
 
 - Checkout is a **mock**: no payment is taken. The server prices every order from the catalog; prices sent by the browser are ignored.
+- Orders can be cancelled from the order page while they're still "Placed" (`src/app/account/orders/actions.js`). There is no shipping to track in this demo, so cancelling is the only status change; a cancelled order stays visible, marked in order history. Users have no direct database permission to change an order — cancelling goes through a server action, the same as placing one.
 - Guests: the bag and wishlist are saved in that browser. Signed-in users: they are saved in Supabase and follow the account across devices. When a guest logs in, the two bags are merged (the larger quantity per product wins).
 - Password reset: the login page's "Forgot password?" sends a Supabase email link that signs the user in and opens the new-password page.
 - Product images (`public/products`) are 3D renders made for this project. Botanical photos (`public/photos`) come from Wikimedia Commons under CC licences; their credits are shown in the home page footer and listed in `src/data/credits.js`. Keep the credits if you keep the photos.
@@ -78,13 +98,15 @@ Supabase free projects pause after about a week without use. `.github/workflows/
 - Search lives in the header: tap Search and the pill becomes a search bar. It also finds products by skin type ("dry skin"), essential oil and ingredient.
 - Design inspired by mdebeauty.com's luxury-boutique feel; brand, copy and imagery are original.
 
+## Verified with a real Supabase project
+
+Tested by hand against a real project on localhost: sign up (with the confirmation email), log in, the guest-bag merge on login, checkout, and the placed order appearing with its sizes.
+
 ## Not verified yet
 
-These need a real Supabase project and a deployed site, which were not available while building:
+These still need a second browser, a deployed site, or a dashboard setting:
 
-- Sign up, log in, and the guest-bag merge on login.
 - Bag and wishlist sync between two browsers signed in to the same account.
-- Placing an order and seeing it in order history.
 - The password-reset email round trip.
-- `scripts/rls-check.mjs` against a real project, and a green keep-alive run.
+- `scripts/rls-check.mjs` against the real project, and a green keep-alive run.
 - A Vercel deploy, and a check on Safari 17, Firefox and Windows.

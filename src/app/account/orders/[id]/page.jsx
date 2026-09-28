@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { formatPrice } from '@/lib/format';
+import { canCancel } from '@/lib/order';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { ClearBagOnMount } from '@/components/ClearBagOnMount';
+import { CancelOrderButton } from '@/components/CancelOrderButton';
 
 export const metadata = { title: 'Order' };
 
@@ -47,12 +49,16 @@ export default async function OrderPage({
           <h1 className="serif pgh">Order details</h1>
         </>
       )}
+      <span className={`status ${order.status}`}>{order.status === 'cancelled' ? 'Cancelled' : 'Placed'}</span>
       <ul className="rows">
         {items.map((i) => <li key={i.slug}><span>{i.name} × {i.qty}</span><span>{formatPrice(i.unitPrice * i.qty)}</span></li>)}
       </ul>
       <p className="sub"><span>Total</span><span>{formatPrice(order.total)}</span></p>
       <p className="muted lede">Ships to {a.name}, {a.line1}, {a.city} {a.postcode}</p>
-      <div className="btnrow"><Link href="/collection" className="btn"><span>Keep shopping</span></Link></div>
+      <div className="btnrow">
+        <Link href="/collection" className="btn"><span>Keep shopping</span></Link>
+        {canCancel(order.status) && <CancelOrderButton orderId={order.id} />}
+      </div>
     </main>
   );
 }

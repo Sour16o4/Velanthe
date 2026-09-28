@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { OrderError, buildOrder, parseAddress } from './order';
+import { OrderError, buildOrder, canCancel, parseAddress } from './order';
 import { bagItem, bySlug } from '@/data/products';
 
 const serum = bySlug('luminous-oil-serum');
@@ -41,6 +41,14 @@ describe('buildOrder', () => {
       assert.throws(() => buildOrder([{ slug: serum.slug, qty }], bySlug), /Invalid quantity/);
     }
     assert.equal(buildOrder([{ slug: serum.slug, qty: 500 }], bySlug).items[0].qty, 10);
+  });
+});
+
+describe('canCancel', () => {
+  it('only a placed order can be cancelled', () => {
+    assert.equal(canCancel('placed'), true);
+    assert.equal(canCancel('cancelled'), false);
+    for (const bad of [undefined, null, '', 'shipped']) assert.equal(canCancel(bad), false, String(bad));
   });
 });
 
