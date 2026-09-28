@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { bySlug, products } from '@/data/products';
-import { formatPrice } from '@/lib/format';
+import { PdpPrice } from '@/components/PdpPrice';
 import { IngredientList } from '@/components/IngredientList';
+import { ProductBadges, ProductFacts } from '@/components/ProductFacts';
 import { AddToBagButton } from '@/components/AddToBagButton';
+import { BuyNowButton } from '@/components/BuyNowButton';
 import { HeartButton } from '@/components/HeartButton';
 
 export const dynamicParams = false;
@@ -11,30 +13,25 @@ export const generateStaticParams = () => products.map((p) => ({ slug: p.slug })
 
 export async function generateMetadata({ params }) {
   const p = bySlug((await params).slug);
-  return p ? { title: p.name, description: p.blurb, openGraph: { title: p.name, description: p.blurb } } : {};
+  return p ? { title: p.name, description: p.blurb, openGraph: { title: p.name, description: p.blurb, images: [p.image] } } : {};
 }
 
 export default async function ProductPage({ params }) {
   const p = bySlug((await params).slug);
   if (!p) notFound();
   return (
-    <main id="main" className="mx-auto grid max-w-7xl gap-12 px-4 pb-24 pt-28 md:grid-cols-2 md:gap-16 md:px-8 md:pt-36">
-      <div className="grid gap-4">
-        {p.images.map((src, i) => (
-          <div key={src} className="relative aspect-[4/5] bg-stone">
-            <Image src={src} alt={i === 0 ? p.name : ''} fill priority={i === 0} sizes="(min-width:768px) 50vw, 100vw" className="object-cover" />
-          </div>
-        ))}
-      </div>
-      <div className="md:sticky md:top-24 md:self-start">
-        <p className="label text-gold-ink">{p.category}</p>
-        <h1 className="display mt-3 text-5xl">{p.name}</h1>
-        <p className="mt-5 text-xl">{formatPrice(p.price)}</p>
-        <p className="mt-8 max-w-prose text-mute">{p.description}</p>
-        <div className="mt-10"><AddToBagButton slug={p.slug} /></div>
-        <div className="relative mt-3 h-10"><HeartButton slug={p.slug} className="absolute left-0 top-0" /></div>
-        <h2 className="label mb-4 mt-16">Key ingredients</h2>
+    <main id="main" className="pg pdp">
+      <div className="pdpimg"><Image src={p.image} alt={p.name} width={700} height={900} priority sizes="(min-width:900px) 45vw, 90vw" /></div>
+      <div className="pdpinfo">
+        <span className="eyebrow">{p.category}</span>
+        <h1 className="serif pgh">{p.name}</h1>
+        <PdpPrice product={p} />
+        <p className="muted lede">{p.description}</p>
+        <ProductBadges product={p} />
+        <div className="pdpbuy"><AddToBagButton slug={p.slug} /><BuyNowButton slug={p.slug} /><HeartButton slug={p.slug} inline /></div>
+        <h2 className="eyebrow ing-h">Key ingredients</h2>
         <IngredientList ingredients={p.ingredients} />
+        <ProductFacts product={p} />
       </div>
     </main>
   );
