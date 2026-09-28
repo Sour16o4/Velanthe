@@ -1,10 +1,23 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { OrderError, buildOrder, parseAddress } from './order';
-import { bySlug } from '@/data/products';
+import { bagItem, bySlug } from '@/data/products';
 
 const serum = bySlug('luminous-oil-serum');
 const cream = bySlug('barrier-repair-cream');
+
+describe('buildOrder with sizes', () => {
+  it('prices each size from the catalog and records the size in the name', () => {
+    const large = bagItem('luminous-oil-serum~l');
+    const o = buildOrder([{ slug: 'luminous-oil-serum~l', qty: 2 }, { slug: 'luminous-oil-serum', qty: 1 }], bagItem);
+    assert.equal(o.total, large.price * 2 + serum.price);
+    assert.equal(o.items[0].name, 'Luminous Oil Serum · 50 ml');
+    assert.equal(o.items[1].name, 'Luminous Oil Serum · 30 ml');
+  });
+  it('rejects an unknown size', () => {
+    assert.throws(() => buildOrder([{ slug: 'luminous-oil-serum~xl', qty: 1 }], bagItem), /no longer available/);
+  });
+});
 
 describe('buildOrder', () => {
   it('computes items and total from the catalog', () => {

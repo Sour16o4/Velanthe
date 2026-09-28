@@ -34,22 +34,25 @@ export default async function OrderPage({
   const justPlaced = placed === '1';
 
   return (
-    <main id="main" className="mx-auto max-w-2xl px-4 pb-16 pt-32">
+    <main id="main" className="pg narrow">
       {justPlaced && <ClearBagOnMount />}
       {justPlaced ? (
         <>
-          <p className="label text-gold-ink">Thank you</p>
-          <h1 className="display mt-2 text-5xl">Order placed</h1>
+          <span className="eyebrow">Thank you</span>
+          <h1 className="serif pgh">Order placed</h1>
         </>
       ) : (
-        <h1 className="display text-5xl">Order details</h1>
+        <>
+          <span className="eyebrow">Account</span>
+          <h1 className="serif pgh">Order details</h1>
+        </>
       )}
-      <ul className="mt-8 divide-y divide-stone border-y border-stone">
-        {items.map((i) => <li key={i.slug} className="flex justify-between py-3"><span>{i.name} × {i.qty}</span><span>{formatPrice(i.unitPrice * i.qty)}</span></li>)}
+      <ul className="rows">
+        {items.map((i) => <li key={i.slug}><span>{i.name} × {i.qty}</span><span>{formatPrice(i.unitPrice * i.qty)}</span></li>)}
       </ul>
-      <p className="mt-4 flex justify-between text-lg"><span>Total</span><span>{formatPrice(order.total)}</span></p>
-      <p className="mt-6 text-mute">Ships to {a.name}, {a.line1}, {a.city} {a.postcode}</p>
-      <Link href="/collection" className="label mt-8 inline-block border border-ink px-6 py-3 hover:bg-gold">Keep shopping</Link>
+      <p className="sub"><span>Total</span><span>{formatPrice(order.total)}</span></p>
+      <p className="muted lede">Ships to {a.name}, {a.line1}, {a.city} {a.postcode}</p>
+      <div className="btnrow"><Link href="/collection" className="btn"><span>Keep shopping</span></Link></div>
     </main>
   );
 }

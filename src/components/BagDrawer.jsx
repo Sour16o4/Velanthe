@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { bySlug } from '@/data/products';
+import { bagItem } from '@/data/products';
 import { bagCount, resolveBag, MAX_QTY } from '@/lib/bag';
 import { formatPrice } from '@/lib/format';
 import { useShop } from '@/store/shop';
@@ -11,33 +11,43 @@ import { Dialog } from './Dialog';
 export function BagDrawer() {
   const { bagOpen, setBag } = useUI();
   const { bag, setQty, hydrated } = useShop();
-  const rows = resolveBag(bag, bySlug);
+  const rows = resolveBag(bag, bagItem);
   const total = rows.reduce((s, r) => s + r.product.price * r.qty, 0);
   return (
     <Dialog open={bagOpen} onClose={() => setBag(false)} label="Shopping bag" className="drawer">
-      <div className="flex h-full flex-col">
-        <div className="flex items-center justify-between border-b border-stone p-5">
-          <h2 className="display text-3xl">Your bag ({bagCount(bag)})</h2>
-          <button className="label" onClick={() => setBag(false)}>Close</button>
+      <div className="dcol">
+        <div className="dhead">
+          <div>
+            <p className="eyebrow">Order summary</p>
+            <h2 className="serif">Your bag</h2>
+          </div>
+          <button type="button" className="dx" aria-label="Close bag" onClick={() => setBag(false)}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" /></svg>
+          </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-5">
-          {!hydrated ? <div className="h-24 animate-pulse bg-stone" aria-hidden />
+        <div className="dbody">
+          {!hydrated ? <div className="skel short" aria-hidden />
             : rows.length === 0 ? (
-              <div className="py-16 text-center"><p className="display text-[1.75rem]">Your bag is empty</p>
-                <Link href="/collection" onClick={() => setBag(false)} className="label mt-6 inline-block border border-ink px-6 py-3">Explore the collection</Link></div>
+              <div className="empty"><p className="serif">Your bag is empty</p>
+                <Link href="/collection" onClick={() => setBag(false)} className="btn"><span>Explore the collection</span></Link></div>
             ) : (
-              <ul className="divide-y divide-stone">
+              <ul className="rows">
                 {rows.map(({ product: p, qty }) => (
-                  <li key={p.slug} className="flex gap-4 py-4">
-                    <div className="relative h-24 w-20 shrink-0 bg-stone"><Image src={p.images[0]} alt="" fill sizes="80px" className="object-cover" /></div>
-                    <div className="flex-1">
-                      <p>{p.name}</p><p className="text-mute">{formatPrice(p.price)}</p>
-                      <div className="mt-2 flex items-center gap-3">
-                        <button aria-label={`Decrease ${p.name}`} onClick={() => setQty(p.slug, qty - 1)} className="h-8 w-8 border border-ink">−</button>
-                        <span aria-live="polite">{qty}</span>
-                        <button aria-label={`Increase ${p.name}`} disabled={qty >= MAX_QTY} onClick={() => setQty(p.slug, qty + 1)} className="h-8 w-8 border border-ink disabled:opacity-40">+</button>
-                        <button onClick={() => setQty(p.slug, 0)} className="label ml-auto underline">Remove</button>
+                  <li key={p.slug} className="bagline">
+                    <Link href={`/product/${p.baseSlug}`} onClick={() => setBag(false)} className="thumb" tabIndex={-1} aria-hidden="true">
+                      <Image src={p.image} alt="" width={80} height={103} />
+                    </Link>
+                    <div>
+                      <Link href={`/product/${p.baseSlug}`} onClick={() => setBag(false)} className="nm">{p.name}</Link>
+                      <div className="unit">
+                        <button type="button" aria-label={`Decrease ${p.name}`} onClick={() => setQty(p.slug, qty - 1)}>−</button>
+                        <span aria-live="polite">{qty} × {formatPrice(p.price)}</span>
+                        <button type="button" aria-label={`Increase ${p.name}`} disabled={qty >= MAX_QTY} onClick={() => setQty(p.slug, qty + 1)}>+</button>
                       </div>
+                    </div>
+                    <div className="amt">
+                      <span>{formatPrice(p.price * qty)}</span>
+                      <button type="button" className="dtext" onClick={() => setQty(p.slug, 0)}>Remove</button>
                     </div>
                   </li>
                 ))}
@@ -45,9 +55,12 @@ export function BagDrawer() {
             )}
         </div>
         {rows.length > 0 && (
-          <div className="border-t border-stone p-5">
-            <p className="mb-4 flex justify-between"><span>Subtotal</span><span>{formatPrice(total)}</span></p>
-            <Link href="/checkout" onClick={() => setBag(false)} className="label block bg-ink px-6 py-4 text-center text-ivory hover:bg-gold hover:text-ink">Checkout</Link>
+          <div className="dfoot">
+            <dl className="dsum">
+              <div><dt>Subtotal</dt><dd>{formatPrice(total)}</dd></div>
+              <div><dt>Shipping</dt><dd>Calculated at checkout</dd></div>
+            </dl>
+            <Link href="/checkout" onClick={() => setBag(false)} className="btn p wide dgo"><span>Checkout</span><span>{formatPrice(total)} →</span></Link>
           </div>
         )}
       </div>

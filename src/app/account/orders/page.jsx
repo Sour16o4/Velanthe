@@ -16,12 +16,13 @@ export default async function Orders() {
   if (!user) redirect('/login?next=/account/orders');
   const { data: orders } = await supabase.from('orders').select('id, total, created_at').order('created_at', { ascending: false });
   return (
-    <main id="main" className="mx-auto max-w-2xl px-4 pb-16 pt-32">
-      <h1 className="display text-5xl">Order history</h1>
-      {!orders?.length ? <p className="mt-8 text-mute">No orders yet.</p> : (
-        <ul className="mt-8 divide-y divide-stone border-y border-stone">
+    <main id="main" className="pg narrow">
+      <span className="eyebrow">Account</span>
+      <h1 className="serif pgh">Order history</h1>
+      {!orders?.length ? <p className="muted lede">No orders yet.</p> : (
+        <ul className="rows">
           {orders.map((o) => (
-            <li key={o.id}><Link href={`/account/orders/${o.id}`} className="flex justify-between py-4">
+            <li key={o.id}><Link href={`/account/orders/${o.id}`} className="rowlink">
               <span>{new Date(o.created_at).toLocaleDateString('en-IN', { dateStyle: 'medium', timeZone: 'Asia/Kolkata' })}</span><span>{formatPrice(o.total)}</span></Link></li>
           ))}
         </ul>

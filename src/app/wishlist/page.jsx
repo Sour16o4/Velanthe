@@ -4,9 +4,10 @@ export const metadata = { title: 'Wishlist' };
 
 export default function Wishlist() {
   return (
-    <main id="main" className="mx-auto max-w-7xl px-4 pb-16 pt-32">
-      <h1 className="display text-5xl">Wishlist</h1>
-      <div className="mt-10"><WishlistGrid /></div>
+    <main id="main" className="pg">
+      <span className="eyebrow">Saved for later</span>
+      <h1 className="serif pgh">Wishlist</h1>
+      <WishlistGrid />
     </main>
   );
 }

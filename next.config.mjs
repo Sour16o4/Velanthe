@@ -1,9 +1,5 @@
-/** Next.js config. SVG is allowed so the placeholder product art in public/img can go through next/image. */
+/** Next.js config (defaults are fine: all images are JPG/PNG in /public). */
 const nextConfig = {
-  images: {
-    dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  },
+  devIndicators: false, // hides the round "N" badge in dev; it never appears in production builds
 };
 export default nextConfig;

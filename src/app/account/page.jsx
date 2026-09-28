@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { LogoutButton } from '@/components/LogoutButton';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
+import { displayName } from '@/lib/user';
 
 export const metadata = { title: 'Account' };
 
@@ -14,11 +15,12 @@ export default async function Account() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login?next=/account');
   return (
-    <main id="main" className="mx-auto max-w-2xl px-4 pb-16 pt-32">
-      <h1 className="display text-5xl">Your account</h1>
-      <p className="mt-4 text-mute">{user.email}</p>
-      <div className="mt-8 flex gap-4">
-        <Link href="/account/orders" className="label border border-ink px-6 py-3 hover:bg-gold">Order history</Link>
+    <main id="main" className="pg narrow">
+      <span className="eyebrow">Account</span>
+      <h1 className="serif pgh">Hello, <em>{displayName(user)}</em></h1>
+      <p className="muted lede">{user.email}</p>
+      <div className="btnrow">
+        <Link href="/account/orders" className="btn"><span>Order history</span></Link>
         <LogoutButton />
       </div>
     </main>
