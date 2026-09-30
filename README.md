@@ -102,13 +102,14 @@ Supabase free projects pause after about a week without use. `.github/workflows/
 
 Tested by hand against a real project: sign up (with the confirmation email), log in, the guest-bag merge on login, checkout, cancelling an order, and the placed order appearing with its sizes — on localhost. Deployed to Vercel and confirmed the live site's pages load correctly.
 
-One deploy pitfall worth noting: Supabase's **Site URL** setting (Authentication → URL Configuration) is the single fallback address used for confirmation/reset email links whenever the page that triggered them isn't already on the allowed Redirect URLs list. Leaving it on `http://localhost:3000` after deploying sends *every* auth email — even ones triggered from the live site — back to localhost. Set Site URL to the production URL once you have one, and keep `http://localhost:3000/**` as an additional entry under Redirect URLs for local dev.
+One deploy pitfall worth noting: Supabase's **Site URL** setting (Authentication → URL Configuration) is the single fallback address used for confirmation/reset email links whenever the page that triggered them isn't already on the allowed Redirect URLs list. Leaving it on `http://localhost:3000` after deploying sends *every* auth email — even ones triggered from the live site — back to localhost. Set Site URL to the production URL once you have one, and keep `http://localhost:3000/**` as an additional entry under Redirect URLs for local dev. Fixed and confirmed: a password-reset email requested from the live site now opens `velanthe.vercel.app` on a phone, not localhost.
+
+The `keepalive` GitHub Actions workflow has also been run manually and completes successfully (pings `/api/health` on the live site).
 
 ## Not verified yet
 
-These still need a second browser or a dashboard setting:
+These still need a second browser or a demo account:
 
 - Bag and wishlist sync between two browsers signed in to the same account.
-- The sign-up/password-reset email round trip on the **live** site specifically (the Site URL fix above was just applied; needs a fresh end-to-end test from a phone or second device).
-- `scripts/rls-check.mjs` against the real project, and a green keep-alive run.
+- `scripts/rls-check.mjs` against the real project — needs a demo account (`NEXT_PUBLIC_DEMO_EMAIL`/`NEXT_PUBLIC_DEMO_PASSWORD` in `.env.local`) to sign in as first.
 - A check on Safari 17, Firefox and Windows.
