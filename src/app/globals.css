@@ -230,6 +230,11 @@ svg,img{display:block}
 .bagbtn.bump{animation:bump 1s cubic-bezier(.3,1.6,.5,1)}
 @keyframes bump{0%{transform:scale(1.1)}100%{transform:scale(1)}}
 @media(max-width:900px){.nav .l{display:none}.nav .menubtn{display:block}}
+/* The floating logo pill was meant to stay visible above an open menu/search sheet, but
+   native <dialog> top-layer stacking doesn't behave the same in every browser (Safari in
+   particular can render it clipped over the sheet's own content). Simpler and consistent
+   everywhere: hide it while any dialog is open, instead of relying on it showing through. */
+html:has(dialog[open]) .nav{opacity:0;pointer-events:none;transition:opacity .2s}
 @media(max-width:760px){.nav .lg{margin-right:8px}}
 
 /* toast */
@@ -285,9 +290,9 @@ em.status.cancelled{margin:0 0 0 12px;height:22px;padding:0 12px;font-size:10px;
 .empty{display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center;padding:64px 0}
 .empty .serif{font-size:clamp(34px,5vw,54px)}
 .pg.empty{min-height:80dvh;justify-content:center}
-.mnav{display:flex;flex-direction:column;gap:6px;padding:84px 26px 34px}
+.mnav{display:flex;flex-direction:column;gap:6px;padding:56px 26px 34px}
 .mnav a,.mnav button{text-align:left;font:300 40px/1.15 var(--font-cormorant),serif;letter-spacing:-.01em;color:var(--pearl)}
-.search{max-width:760px;margin:0 auto;padding:84px 26px 34px}
+.search{max-width:760px;margin:0 auto;padding:56px 26px 34px}
 .qinput{display:block;width:100%;margin-top:14px;border:0;border-bottom:1px solid var(--gold);background:transparent;color:var(--pearl);padding:0 0 12px;font-size:clamp(34px,5vw,56px);font-weight:300}
 .qinput:focus{outline:none;border-bottom-color:var(--gold2);box-shadow:0 1px 0 var(--gold2)}
 .hits{margin-top:18px}

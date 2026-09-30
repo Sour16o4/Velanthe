@@ -110,6 +110,8 @@ Bag and wishlist sync between devices was tested phone (incognito) + laptop, sam
 
 `scripts/rls-check.mjs` has been run against the real project with a demo account and passes all five checks: a signed-in user cannot insert an order directly (only the server, pricing it from the catalog, can), cannot write to another user's bag, cannot set a bag quantity outside 1–10, and their own valid writes still go through normally.
 
+Checked on Mobile Safari (iPhone, real device): home page, the mobile menu, and the bag drawer with mixed sizes of the same product as separate lines — all render correctly, and the prices and subtotal check out against the catalog.
+
 ## Not verified yet
 
-- A check on Safari 17, Firefox and Windows.
+- Desktop Safari (Mac) and Firefox, and a check on Windows.
