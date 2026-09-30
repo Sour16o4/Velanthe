@@ -106,10 +106,11 @@ One deploy pitfall worth noting: Supabase's **Site URL** setting (Authentication
 
 The `keepalive` GitHub Actions workflow has also been run manually and completes successfully (pings `/api/health` on the live site).
 
+Bag and wishlist sync between devices was tested phone (incognito) + laptop, same account: the bag synced immediately on login, and wishlist items added on the phone appeared on the laptop without a manual reload, as soon as that tab regained focus. This is by design, not live: `StoreProvider.jsx` re-fetches the bag/wishlist on sign-in and whenever a signed-in tab's `focus` event fires — not continuously, so a change on one device shows up on another only once you switch back to it, not while you're still looking elsewhere.
+
 ## Not verified yet
 
-These still need a second browser or a demo account:
+These still need a demo account:
 
-- Bag and wishlist sync between two browsers signed in to the same account.
 - `scripts/rls-check.mjs` against the real project — needs a demo account (`NEXT_PUBLIC_DEMO_EMAIL`/`NEXT_PUBLIC_DEMO_PASSWORD` in `.env.local`) to sign in as first.
 - A check on Safari 17, Firefox and Windows.
