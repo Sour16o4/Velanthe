@@ -108,9 +108,8 @@ The `keepalive` GitHub Actions workflow has also been run manually and completes
 
 Bag and wishlist sync between devices was tested phone (incognito) + laptop, same account: the bag synced immediately on login, and wishlist items added on the phone appeared on the laptop without a manual reload, as soon as that tab regained focus. This is by design, not live: `StoreProvider.jsx` re-fetches the bag/wishlist on sign-in and whenever a signed-in tab's `focus` event fires — not continuously, so a change on one device shows up on another only once you switch back to it, not while you're still looking elsewhere.
 
+`scripts/rls-check.mjs` has been run against the real project with a demo account and passes all five checks: a signed-in user cannot insert an order directly (only the server, pricing it from the catalog, can), cannot write to another user's bag, cannot set a bag quantity outside 1–10, and their own valid writes still go through normally.
+
 ## Not verified yet
 
-These still need a demo account:
-
-- `scripts/rls-check.mjs` against the real project — needs a demo account (`NEXT_PUBLIC_DEMO_EMAIL`/`NEXT_PUBLIC_DEMO_PASSWORD` in `.env.local`) to sign in as first.
 - A check on Safari 17, Firefox and Windows.
