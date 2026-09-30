@@ -35,7 +35,7 @@ export function ForgotPasswordForm() {
       <label className="eyebrow" htmlFor="email">Email</label>
       <input id="email" name="email" type="email" required autoComplete="email" spellCheck={false} className="fld" />
       {error && <p role="alert" className="err">{error}</p>}
-      <button disabled={busy} className="btn p wide"><span>Send link</span></button>
+      <button disabled={busy} className="btn p wide"><span>{busy ? 'Sending…' : 'Send link'}</span></button>
     </form>
   );
 }

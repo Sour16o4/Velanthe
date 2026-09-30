@@ -41,7 +41,10 @@ svg,img{display:block}
 #ld svg{width:84px;height:auto;overflow:visible}
 #ld path{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 #ld .nm{font:400 13px/1 var(--font-jost);letter-spacing:.7em;text-indent:.7em;color:var(--gold2);text-transform:uppercase}
-.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 34px;border-radius:999px;border:1px solid var(--gold);color:var(--pearl);font:400 13px/1 var(--font-jost);letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;isolation:isolate;transition:color .5s var(--ease)}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 34px;border-radius:999px;border:1px solid var(--gold);color:var(--pearl);font:400 13px/1 var(--font-jost);letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;isolation:isolate;transition:color .5s var(--ease),opacity .3s}
+/* A disabled button (mid-request, e.g. signing in) must look different from an idle one,
+   or a slow network makes a working tap look like a dead one and invites a second tap. */
+.btn:disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
 .btn::before{content:"";position:absolute;inset:-1px;background:var(--gold);transform:translateY(102%);transition:transform .7s var(--ease);z-index:-1;border-radius:inherit}
 .btn:hover{color:var(--bg0)}.btn:hover::before{transform:none}
 .btn.p{background:var(--gold);color:var(--bg0)}

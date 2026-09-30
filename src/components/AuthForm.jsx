@@ -66,7 +66,7 @@ export function AuthForm({ mode }) {
         <input id="password" name="password" type="password" required minLength={6} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} className="fld" />
         {error && <p role="alert" className="err">{error}</p>}
         {notice && <p role="status" className="okmsg">{notice}</p>}
-        <button disabled={busy} className="btn p wide"><span>{mode === 'login' ? 'Log in' : 'Sign up'}</span></button>
+        <button disabled={busy} className="btn p wide"><span>{busy ? (mode === 'login' ? 'Logging in…' : 'Signing up…') : (mode === 'login' ? 'Log in' : 'Sign up')}</span></button>
       </form>
       {mode === 'login' && demoReady && (
         <button type="button" disabled={busy} onClick={() => submit(process.env.NEXT_PUBLIC_DEMO_EMAIL, process.env.NEXT_PUBLIC_DEMO_PASSWORD)}
