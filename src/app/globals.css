@@ -290,8 +290,13 @@ em.status.cancelled{margin:0 0 0 12px;height:22px;padding:0 12px;font-size:10px;
 .empty{display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center;padding:64px 0}
 .empty .serif{font-size:clamp(34px,5vw,54px)}
 .pg.empty{min-height:80dvh;justify-content:center}
-.mnav{display:flex;flex-direction:column;gap:6px;padding:56px 26px 34px}
-.mnav a,.mnav button{text-align:left;font:300 40px/1.15 var(--font-cormorant),serif;letter-spacing:-.01em;color:var(--pearl)}
+.mnav{display:flex;flex-direction:column;gap:4px;padding:40px 26px 22px}
+/* This menu only ever renders on narrow/mobile viewports (see .nav .menubtn above), but unlike
+   every other large heading on the site it was hard-coded to one size instead of scaling with
+   the viewport. The first clamp() attempt here (9vw, capped at 40px) still landed at ~37-40px
+   on real phone widths (390-430px) — basically the old flat size — so it looked unchanged.
+   Using a smaller vw factor so it actually shrinks on a phone, not just in theory. */
+.mnav a,.mnav button{text-align:left;font:300 clamp(20px,5.8vw,34px)/1.15 var(--font-cormorant),serif;letter-spacing:-.01em;color:var(--pearl)}
 .search{max-width:760px;margin:0 auto;padding:56px 26px 34px}
 .qinput{display:block;width:100%;margin-top:14px;border:0;border-bottom:1px solid var(--gold);background:transparent;color:var(--pearl);padding:0 0 12px;font-size:clamp(34px,5vw,56px);font-weight:300}
 .qinput:focus{outline:none;border-bottom-color:var(--gold2);box-shadow:0 1px 0 var(--gold2)}
