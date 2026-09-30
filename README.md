@@ -2,7 +2,7 @@
 
 A portfolio e-commerce site for Velanthe, an invented luxury skincare brand. Browse the catalog, add items to a bag and wishlist, search, sign in with a Supabase account (or stay a guest), place a mock order and see it in order history.
 
-**Live URL:** add here after deploying to Vercel.
+**Live URL:** https://velanthe.vercel.app
 
 ## Screenshots
 
@@ -46,7 +46,7 @@ Open http://localhost:3000.
 ## Enable accounts (Supabase, optional)
 
 1. supabase.com → New project (free tier).
-2. Project Settings → API: copy the **Project URL**, **anon public** key and **service_role** key.
+2. Project Settings → API: copy the **Project URL**, **anon public** key and **service_role** key. (Newer Supabase projects show "Publishable" and "Secret" keys instead — those work the same way here; use whichever your project's API Keys page shows.)
 3. Authentication → Providers → Email: turn **off** "Confirm email".
 4. Authentication → URL Configuration: Site URL = your site's URL; add `http://localhost:3000/**` and your site's URL `/**` as redirect URLs.
 5. Authentication → Users → Add user: `demo@example.com` with a password you choose.
@@ -100,13 +100,15 @@ Supabase free projects pause after about a week without use. `.github/workflows/
 
 ## Verified with a real Supabase project
 
-Tested by hand against a real project on localhost: sign up (with the confirmation email), log in, the guest-bag merge on login, checkout, and the placed order appearing with its sizes.
+Tested by hand against a real project: sign up (with the confirmation email), log in, the guest-bag merge on login, checkout, cancelling an order, and the placed order appearing with its sizes — on localhost. Deployed to Vercel and confirmed the live site's pages load correctly.
+
+One deploy pitfall worth noting: Supabase's **Site URL** setting (Authentication → URL Configuration) is the single fallback address used for confirmation/reset email links whenever the page that triggered them isn't already on the allowed Redirect URLs list. Leaving it on `http://localhost:3000` after deploying sends *every* auth email — even ones triggered from the live site — back to localhost. Set Site URL to the production URL once you have one, and keep `http://localhost:3000/**` as an additional entry under Redirect URLs for local dev.
 
 ## Not verified yet
 
-These still need a second browser, a deployed site, or a dashboard setting:
+These still need a second browser or a dashboard setting:
 
 - Bag and wishlist sync between two browsers signed in to the same account.
-- The password-reset email round trip.
+- The sign-up/password-reset email round trip on the **live** site specifically (the Site URL fix above was just applied; needs a fresh end-to-end test from a phone or second device).
 - `scripts/rls-check.mjs` against the real project, and a green keep-alive run.
-- A Vercel deploy, and a check on Safari 17, Firefox and Windows.
+- A check on Safari 17, Firefox and Windows.
